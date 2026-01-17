@@ -51,7 +51,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'getTokenAndSubdomain') {
         }
         
         // Prepare the token request
-        $tokenUrl = "https://login.windows.net/$tenantId/oauth2/token";
+        $tokenUrl = "https://login.microsoftonline.com/$tenantId/oauth2/token";
         
         $postData = [
             'grant_type' => 'client_credentials',
@@ -70,6 +70,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'getTokenAndSubdomain') {
         ]);
         
         $response = curl_exec($ch);
+        
+        if ($response === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new Exception('cURL error: ' . $error);
+        }
+        
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         
@@ -109,7 +116,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'getTokenAndSubdomain') {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Immersive Reader PHP Quickstart</title>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script type='text/javascript' src='https://ircdname.azureedge.net/immersivereadersdk/immersive-reader-sdk.1.4.0.js'></script>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"/>
